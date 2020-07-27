@@ -4,35 +4,42 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Mvc;
 using test_app.Models;
+
 
 namespace test_app.Controllers
 {
     public class myController : ApiController
     {
-        [RoutePrefix("api/User")]
+        [System.Web.Http.RoutePrefix("api/User")]
         public class UserController : ApiController
         {
             invoicesEntities objEntity = new invoicesEntities();
 
-            [HttpGet]
-            [Route("GetUserDetails")]
-            public IQueryable<user> GetUserDetails()
+            [System.Web.Http.HttpGet]
+            [System.Web.Http.Route("GetUserDetails")]
+            public ActionResult GetUserDetails()
             {
+                var allUsers = new List<user>();
                 try
                 {
-                    return objEntity.users;
+                    Console.WriteLine(objEntity.users);
+                    allUsers = objEntity.users.ToList();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    throw;
+                    Console.WriteLine("{0} Exception caught.", e.Message);
                 }
+
+                return null; /*Json(allUsers, JsonRequestBehavior.AllowGet);*/
             }
 
-            [HttpGet]
-            [Route("GetUserDetailsById/{userId}")]
+            [System.Web.Http.HttpGet]
+            [System.Web.Http.Route("GetUserDetailsById/{userId}")]
             public IHttpActionResult GetUserById(int userId)
             {
+                Console.WriteLine("GetUserDetailsById"); 
                 user objUser = new user();
                 //int ID = Convert.ToInt32(userId);
                 try
@@ -52,8 +59,8 @@ namespace test_app.Controllers
                 return Ok(objUser);
             }
 
-            [HttpPost]
-            [Route("InsertUserDetails")]
+            [System.Web.Http.HttpPost]
+            [System.Web.Http.Route("InsertUserDetails")]
             public IHttpActionResult PostUser(user data)
             {
                 string message = "";
@@ -82,8 +89,8 @@ namespace test_app.Controllers
                 return Ok(message);
             }
 
-            [HttpPut]
-            [Route("UpdateEmployeeDetails")]
+            [System.Web.Http.HttpPut]
+            [System.Web.Http.Route("UpdateEmployeeDetails")]
             public IHttpActionResult PutUserMaster(user user)
             {
                 string message = "";
@@ -126,8 +133,8 @@ namespace test_app.Controllers
                 return Ok(message);
             }
 
-            [HttpDelete]
-            [Route("DeleteUserDetails/{id}")]
+            [System.Web.Http.HttpDelete]
+            [System.Web.Http.Route("DeleteUserDetails/{id}")]
             public IHttpActionResult DeleteUserDelete(int id)
             {
                 string message = "";
